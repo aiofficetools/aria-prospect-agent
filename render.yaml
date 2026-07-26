@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: aria-prospect-agent
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SIGNALWIRE_PROJECT_ID
+        sync: false
+      - key: SIGNALWIRE_TOKEN
+        sync: false
+      - key: SIGNALWIRE_SPACE
+        sync: false
+      - key: SIGNALWIRE_NUMBER
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: NOTIFY_EMAIL
+        sync: false
+      - key: NOTIFY_PHONE
+        sync: false
