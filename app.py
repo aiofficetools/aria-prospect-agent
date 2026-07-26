@@ -6,7 +6,6 @@ from datetime import datetime
 from flask import Flask, request, jsonify, render_template_string
 from flask_cors import CORS
 from dotenv import load_dotenv
-import anthropic
 
 load_dotenv()
 
@@ -24,7 +23,6 @@ SIGNALWIRE_NUMBER = os.getenv("SIGNALWIRE_NUMBER", "+1XXXXXXXXXX")
 NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", "aiofficetools@gmail.com")
 NOTIFY_PHONE = os.getenv("NOTIFY_PHONE", "YOUR_PERSONAL_NUMBER")
 
-anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 OPENING_MESSAGE = """Hi {name}! This is ARIA from AI Office Tools. We help {business_type} businesses in the Belleville area with AI-powered websites, 24/7 phone answering, and automated booking — so you never miss a lead again.
 
@@ -90,6 +88,10 @@ def notify_jasmyn(prospect):
 
 def get_ai_response(phone, incoming_message):
     """Get AI response for an incoming SMS"""
+    import urllib.request
+    import urllib.parse
+    import json
+
     if phone not in conversations:
         conversations[phone] = []
 
@@ -98,14 +100,25 @@ def get_ai_response(phone, incoming_message):
         "content": incoming_message
     })
 
-    response = anthropic_client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=300,
-        system=SYSTEM_PROMPT,
-        messages=conversations[phone]
-    )
+    payload = json.dumps({
+        "model": "claude-sonnet-4-6",
+        "max_tokens": 300,
+        "system": SYSTEM_PROMPT,
+        "messages": conversations[phone]
+    }).encode()
 
-    reply = response.content[0].text
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=payload,
+        method="POST"
+    )
+    req.add_header("Content-Type", "application/json")
+    req.add_header("x-api-key", os.getenv("ANTHROPIC_API_KEY", ""))
+    req.add_header("anthropic-version", "2023-06-01")
+
+    with urllib.request.urlopen(req) as response:
+        data = json.loads(response.read().decode())
+        reply = data["content"][0]["text"]
 
     conversations[phone].append({
         "role": "assistant",
