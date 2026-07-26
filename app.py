@@ -2,6 +2,7 @@ import os
 import json
 import csv
 import io
+import uuid
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template_string
 from flask_cors import CORS
@@ -296,7 +297,40 @@ def get_stats():
         "not_interested": sum(1 for p in all_p if p["status"] == "not_interested"),
     })
 
+@app.route("/api/stats", methods=["GET"])
+def get_stats():
+    ...existing code...
 
+@app.route("/api/add_prospect", methods=["POST"])
+def add_prospect():
+    data = request.json
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    name = data.get("name", "Unknown")
+    phone = data.get("phone", "")
+    business_type = data.get("business_type", "")
+    
+    if not phone:
+        return jsonify({"error": "Phone number required"}), 400
+    
+    prospect_id = str(uuid.uuid4())[:8]
+    prospects[prospect_id] = {
+        "id": prospect_id,
+        "name": name,
+        "phone": phone,
+        "business_type": business_type,
+        "status": "new",
+        "last_contact": None,
+        "messages": []
+    }
+    
+    return jsonify({"success": True, "id": prospect_id, "message": f"Prospect {name} added successfully"})
+
+
+if __name__ == "__main__":
+    os.makedirs("templates", exist_ok=True)
+    app.run(debug=True, port=5000)
 if __name__ == "__main__":
     os.makedirs("templates", exist_ok=True)
     app.run(debug=True, port=5000)
