@@ -24,7 +24,7 @@ SIGNALWIRE_NUMBER = os.getenv("SIGNALWIRE_NUMBER", "+1XXXXXXXXXX")
 NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", "aiofficetools@gmail.com")
 NOTIFY_PHONE = os.getenv("NOTIFY_PHONE", "YOUR_PERSONAL_NUMBER")
 
-anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
+anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 OPENING_MESSAGE = """Hi {name}! This is ARIA from AI Office Tools. We help {business_type} businesses in the Belleville area with AI-powered websites, 24/7 phone answering, and automated booking — so you never miss a lead again.
 
