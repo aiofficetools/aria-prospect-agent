@@ -25,9 +25,7 @@ NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", "aiofficetools@gmail.com")
 NOTIFY_PHONE = os.getenv("NOTIFY_PHONE", "YOUR_PERSONAL_NUMBER")
 
 
-OPENING_MESSAGE = """Hi {name}! This is ARIA from AI Office Tools. We help {business_type} businesses in the Belleville area with AI-powered websites, 24/7 phone answering, and automated booking — so you never miss a lead again.
-
-Quick question: is missing calls ever a problem for your business? 😊"""
+OPENING_MESSAGE = """Hi {name}! This is ARIA from AI Office Tools. I'm an AI specialist serving businesses across Ontario. I help local {business_type} businesses get more customers and save money using AI tools — things like 24/7 phone answering, automatic booking, and Google review management. No pressure at all, just wondering if that's something you'd want to hear more about? 😊"""
 
 SYSTEM_PROMPT = """You are ARIA, a friendly AI assistant for AI Office Tools — an agency that helps small trades businesses (plumbers, electricians, HVAC, salons) in the Belleville/Quinte West area of Ontario, Canada with:
 - AI-built websites
