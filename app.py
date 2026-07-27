@@ -296,7 +296,7 @@ def get_stats():
     })
 
 @app.route("/api/add_prospect", methods=["POST"])
-def add_prospect():
+def add_prospect():   
     data = request.json
     if not data:
         return jsonify({"error": "No data provided"}), 400
@@ -320,6 +320,14 @@ def add_prospect():
     }
 
     return jsonify({"success": True, "id": prospect_id, "message": f"Prospect {name} added successfully"})
+
+@app.route("/api/delete_prospect/<prospect_id>", methods=["DELETE"])
+def delete_prospect(prospect_id):
+    if prospect_id in prospects:
+        name = prospects[prospect_id].get("name", "Unknown")
+        del prospects[prospect_id]
+        return jsonify({"success": True, "message": f"Prospect {name} deleted"})
+    return jsonify({"error": "Prospect not found"}), 404
 if __name__ == "__main__":
     os.makedirs("templates", exist_ok=True)
     app.run(debug=True, port=5000)

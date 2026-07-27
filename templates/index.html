@@ -632,6 +632,7 @@ function renderTable() {
         <div class="actions">
           <div class="icon-btn send" title="Send opening text" onclick="sendOne('${p.phone}')">📤</div>
           <div class="icon-btn" title="View conversation" onclick="viewConvo('${p.phone}', '${p.name}')">💬</div>
+          <div class="icon-btn delete" title="Delete prospect" onclick="deleteProspect('${p.id}')">🗑️</div>
         </div>
       </td>
     </tr>
@@ -699,6 +700,22 @@ async function sendOne(phone) {
     }
   } catch(e) {
     toast('Send failed', 'error');
+  }
+}
+
+async function deleteProspect(id) {
+  if (!confirm('Delete this prospect?')) return;
+  try {
+    const r = await fetch(`/api/delete_prospect/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    const d = await r.json();
+    if (d.success) {
+      toast('🗑️ Prospect deleted', 'success');
+      await init();
+    } else {
+      toast(d.error || 'Failed to delete', 'error');
+    }
+  } catch(e) {
+    toast('Delete failed', 'error');
   }
 }
 
